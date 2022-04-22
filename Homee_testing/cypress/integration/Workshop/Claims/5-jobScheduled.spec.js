@@ -1,0 +1,47 @@
+describe('Schedule and Reschedule Job', () => {
+    beforeEach(function () {
+        cy.viewport(1680, 1050)
+        cy.internalLogin()
+        const claimID = 'AUA-0000004'
+        cy.clock
+        cy.wait(2000)
+        cy.visit('https://workshop.dev.homee.com/claims')
+        cy.wait(2000)
+        cy.contains(claimID).click({force: true})
+        cy.get('h1').should('include.text', claimID)
+        
+    })
+    it("Schedule Job", () => {
+        cy.contains("Job Scheduled").click()
+        cy.get("#scheduled-for-time").click()
+        cy.get('.CalendarDay__today').click()
+        cy.get('#scheduled-for-time > .css-1wh42bc-control > .css-1hwfws3').type('9:45 AM{enter}')
+        cy.get('label.jsx-1893445797 > .jsx-1893445797').type("Job Scheduled Automated notes")
+        cy.contains("Update Status").click()
+        cy.get('button.jsx-294498644 > svg > path').click()
+        cy.get('h2').should('include.text', 'Job Scheduled')
+        cy.screenshot('jobScheduled')
+    })
+    it("Reschedule Job", () => {
+        cy.contains("Job Rescheduled").click()
+        cy.get("#scheduled-for-time").click()
+        cy.get('.CalendarDay__today').click()
+        cy.get('#scheduled-for-time > .css-1wh42bc-control > .css-1hwfws3').type('11:00 AM{enter}')
+        cy.get('label.jsx-1893445797 > .jsx-1893445797').type("Job Scheduled Automated notes")
+        cy.contains("Update Status").click()
+        cy.get('button.jsx-294498644 > svg > path').click()
+        cy.get('h2').should('include.text', 'Job Scheduled')
+        cy.screenshot('jobRescheduled')
+    })
+    it("Reschedule Jobto an earlier time", () => {
+        cy.contains("Job Rescheduled").click()
+        cy.get("#scheduled-for-time").click()
+        cy.get('.CalendarDay__today').click()
+        cy.get('#scheduled-for-time > .css-1wh42bc-control > .css-1hwfws3').type('10:00 AM{enter}')
+        cy.get('label.jsx-1893445797 > .jsx-1893445797').type("Job Scheduled Automated notes")
+        cy.contains("Update Status").click()
+        cy.get('button.jsx-294498644 > svg > path').click()
+        cy.get('h2').should('include.text', 'Job Scheduled')
+        cy.screenshot('jobRescheduledEarlier')
+    })
+})

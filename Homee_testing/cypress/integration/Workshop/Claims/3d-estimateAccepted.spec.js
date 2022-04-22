@@ -1,0 +1,35 @@
+describe("Accept Estimate by both Insured and Adjuster", () => {
+    beforeEach (function () {
+        cy.viewport(1680,1050)
+    })
+    it("Accept Estimate as Insured", () => {
+        const claimID = 'AUA-0000004'
+        cy.internalLogin()
+        cy.wait(2000)
+        cy.visit('https://workshop.dev.homee.com/claims')
+        cy.wait(2000)
+        cy.contains(claimID).click({force: true})
+        cy.get('h1').should('include.text', claimID)
+        cy.contains('Estimate Approved').click()
+        cy.contains("Approved by Insured").click({force: true})
+        cy.contains('Update Status').click()
+        cy.get('button.jsx-294498644 > svg > path').click()
+        cy.get('h2').should('include.text', 'Estimate Review')
+        cy.screenshot('estAcceptedIns')
+    })
+    it("Accpeted Estimate as Adjuster", () => {
+        const claimID = 'AUA-0000004'
+        cy.adjusterLogin()
+        cy.wait(2000)
+        cy.visit('https://workshop.dev.homee.com/claims')
+        cy.wait(2000)
+        cy.contains(claimID).click({force: true})
+        cy.get('h1').should('include.text', claimID)
+        cy.contains('Estimate Approved').click()
+        cy.contains("Approved by Adjuster").click({force: true})
+        cy.contains('Update Status').click()
+        cy.get('button.jsx-294498644 > svg > path').click()
+        cy.get('h2').should('include.text', 'Estimate Approved')
+        cy.screenshot('estAcceptedAdj')
+    })
+})
